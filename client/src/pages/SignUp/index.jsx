@@ -12,12 +12,18 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import * as md5 from 'md5'
 import { useState } from 'react'
 import { Alert } from '@mui/material'
+import { useDispatch } from 'react-redux'
+import { registrationDispatch } from '../../store/user/userSlice'
+import { useNavigate } from 'react-router-dom'
+import { RouteConstants } from '../../routes/routes-constant'
 
 const theme = createTheme()
 
 export const SignUp = () => {
   const [error, setError] = useState(null)
   const [warning, setWarning] = useState(null)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const handleSubmit = (event) => {
     event.preventDefault()
     setWarning(null)
@@ -28,6 +34,9 @@ export const SignUp = () => {
     const password = data.get('password')
     const hashPassword = md5(password)
     if (!firstName || !lastName || !login || !password) setWarning('Заполните все поля')
+    if (dispatch(registrationDispatch({ login, first_name: firstName, last_name: lastName, password }))) {
+      navigate(RouteConstants.HOME_PATH)
+    }
   }
 
   return (

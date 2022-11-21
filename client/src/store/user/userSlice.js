@@ -42,6 +42,20 @@ export const loginDispatch = (data) => async (dispatch) => {
   }
 }
 
+export const registrationDispatch = (data) => async (dispatch) => {
+  const [result, error] = await api.registrationRequest(data)
+
+  if (result && result.status) {
+    localStorage.setItem('access_token', result.data.access_token)
+    dispatch(setAdminStatus(result.data.is_admin))
+    return true
+  }
+
+  if (error) {
+    return dispatch(handleError(error))
+  }
+}
+
 export const getProfile = (data) => async (dispatch) => {
   const [result, error] = await api.loginRequest(data)
 }

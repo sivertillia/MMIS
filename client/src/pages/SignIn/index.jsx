@@ -13,11 +13,14 @@ import * as md5 from 'md5'
 import { useDispatch } from 'react-redux'
 import { loginDispatch } from '../../store/user/userSlice'
 import { RouteConstants } from '../../routes/routes-constant'
+import { useNavigate } from 'react-router-dom'
 
 const theme = createTheme()
 
 export const SignInSide = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -25,7 +28,9 @@ export const SignInSide = () => {
     const password = data.get('password')
     const hashPassword = md5(password)
     console.log(login, password, hashPassword)
-    dispatch(loginDispatch({ login, password: hashPassword }))
+    if (dispatch(loginDispatch({ login, password: hashPassword }))) {
+      navigate(RouteConstants.HOME_PATH)
+    }
   }
 
   return (
